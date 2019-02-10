@@ -55,6 +55,19 @@ Doc tech
 
 The project will involve a lot of documentation writing. Needs a bit of thinking as to which tech to pick for that and how to get the code and the documentation to live side by side without.
 
+Selector & specificity management
+---------------------------------
+
+CSS provides a variety of selector as well as different ways to combine them.
+
+Element selectors might be used to enforce proper semantics (thinking `:checked + label[for]` kind of things). The universal selector `*` can also be used when patterns call for it, but best limited to using with `>` or `+` combinators. Using it with simple descendance (` `) or following siblings `~` combinators might result in too wide a targeting. Combination of specific elements should be avoided as much as possible, that's just replicating the HTML structure in CSS, ie. not where it should be. Element wide styling should be fenced by a `:not(no-default)` selector to easily get to a blank state, rather than having to undo specific properties and make styling depend on the default styles.
+
+IDs are best left out of the picture given we're talking of a framework to be used in various environments. Don't want to force IDs on the user (plus IDs are best left out unless no edition of the HTML is possible. Best leave them to do HTMLy things like linking to a part of the document, labeling fields or doing ARIA labelling and descriptions).
+
+This leaves classes and attribute selectors to make the main way of applying styles for the framework. This levels the playing field to a `0 0 N 0` specificity, and ideally we'll want to keep N as low as possible (2 most probably). Any form of combinations should be OK, as long as the second class is an element of the block (ideally we don't want a block to style another block). But again idea would be to keep that as targetted as the patterns allow.
+
+For attribute selectors, if ever used as selectors on their own, they should get a `:not(no-default)` variant (probably need a separate naming to avoid collisition with the elements' `no-default`). But mostly, they should remain used in combination with a class (either as `.class[attr="value"]` or `.class [attr="value"]).
+
 Organisation & naming
 ---------------------
 
