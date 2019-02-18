@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "description": "A gathering of HTML & CSS (with a hint of JS) patterns",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel scss/index.scss"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhumaric/markup-engineering-tools.git"
+  },
+  "author": "Romaric Pascal <hello@romaricpascal.is>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhumaric/markup-engineering-tools/issues"
+  },
+  "homepage": "https://github.com/rhumaric/markup-engineering-tools#readme",
+  "devDependencies": {
+    "parcel": "^1.11.0",
+    "sass": "^1.17.0"
+  }
+}
