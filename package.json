@@ -4,7 +4,9 @@
   "description": "A gathering of HTML & CSS (with a hint of JS) patterns",
   "main": "index.js",
   "scripts": {
-    "build": "parcel scss/index.scss"
+    "dev": "parcel scss/index.scss",
+    "build": "parcel build scss/index.scss",
+    "lint:css": "stylelint 'scss/**/*.scss'"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,15 @@
   "homepage": "https://github.com/rhumaric/markup-engineering-tools#readme",
   "devDependencies": {
     "parcel": "^1.11.0",
-    "sass": "^1.17.0"
+    "prettier": "^1.16.4",
+    "sass": "^1.17.0",
+    "stylelint": "^9.10.1",
+    "stylelint-at-rule-import-case": "^1.1.0",
+    "stylelint-at-rule-import-path": "^1.0.2",
+    "stylelint-config-prettier": "^4.0.0",
+    "stylelint-config-recommended-scss": "^3.2.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-prettier": "^1.0.6",
+    "stylelint-scss": "^3.5.3"
   }
 }
