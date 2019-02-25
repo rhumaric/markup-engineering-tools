@@ -1,0 +1,35 @@
+@function pct($length, $base-length) {
+  @return length-ratio($length, $base-length, 100%);
+}
+
+@function vw($length, $base-length) {
+  @return length-ratio($length, $base-length, 100vw);
+}
+
+@function vh($length, $base-length) {
+  @return length-ratio($length, $base-length, 100vh);
+}
+
+$base-font-size: 16px !default;
+
+@function em($length, $base-font-size: $base-font-size) {
+  @return length-ratio($length, $base-length, 1em);
+}
+
+@function rem($length, $base-font-size: $base-font-size) {
+  @return length-ratio($length, $base-length, 1rem);
+}
+
+@function length-ratio($length, $base-length, $factor) {
+  @return ($factor * $length / $base-length);
+}
+
+// Foundation's strip-unit function
+/// Removes the unit from a numeric value
+///
+/// @param {Number} $value - The value to strip unit from
+///
+/// @return {Number} The number, without its unit
+@function strip-unit($value) {
+  @return $num / ($num * 0 + 1);
+}

@@ -1,0 +1,31 @@
+/// @group maps
+$breakpoints: (
+  xs: 320,
+  lg: 1200
+);
+
+@function breakpoint($breakpoint-name) {
+  @return map-get($breakpoints, $breakpoint-name);
+}
+
+@mixin add-breakpoint($name, $viewport-width, $breakpoints: $breakpoints) {
+  // From sass-mq
+  $new-breakpoint: (
+    $name: $viewport-width
+  );
+  $mq-breakpoints: map-merge($breakpoints, $new-breakpoint);
+  // SASS-MQ sorts the breakpoints by ascending order. Not sure of the gain here?
+}
+
+/// @group functions
+@function from($breakpoint-name, $breakpoints: $breakpoints) {
+}
+
+@function until($breakpoint-name, $breakpoints: $breakpoints) {
+}
+
+@function between($breakpoint-name, $breakpoints: $breakpoints) {
+}
+
+/// @group mixins
+// Media query mixin?

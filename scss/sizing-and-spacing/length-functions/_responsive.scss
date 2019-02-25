@@ -1,0 +1,37 @@
+$responsive-base-length: 16;
+$responsive-base-viewport-width: breakpoint(xs);
+$responsive-viewport-width: breakpoint(lg);
+
+/// Creates a computed value that scales
+/// from `$base-length` at `$base-vieport-width`
+/// to `$length` at `$viewport-width`
+@function responsive(
+  $length,
+  $viewport-width: $reponsive-viewport-width,
+  $base-length: $responsive-base-length,
+  $base-viewport-width: $responsive-base-viewport-width
+) {
+  // TODO: Do the maths
+}
+
+// TODO: Allow $length to be described as a (breakpoint length) list?
+// (1200 30, 768 20, 375 18)
+@mixin responsive(
+  $property,
+  $length,
+  $viewport-width: $responsive-viewport-width,
+  $base-length: $responsive-base-length,
+  $base-viewport-width: $responsive-base-viewport-width,
+  $breakpoint-type: max
+) {
+  #{$property}: $length;
+
+  @media (max-width: $viewport-width) {
+    #{$property}: responsive(
+      $length,
+      $viewport-width,
+      $base-length,
+      $base-viewport-width
+    );
+  }
+}

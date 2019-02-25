@@ -1,0 +1,10 @@
+$columns-number: 12;
+$columns-gutter-size: 1rem;
+
+@function column-size(
+  $span: 1,
+  $columns: 12,
+  $gutter-size: $columns-gutter-size
+) {
+  // Do the maths here
+}
