@@ -1,3 +1,5 @@
+@import "units";
+
 /// @group maps
 $breakpoints: (
   xs: 320,
@@ -18,14 +20,16 @@ $breakpoints: (
 }
 
 /// @group functions
-@function from($breakpoint-name, $breakpoints: $breakpoints) {
+@function from($breakpoint, $breakpoints: $breakpoints) {
+  @return "(min-width: #{em($breakpoint)})";
 }
 
-@function until($breakpoint-name, $breakpoints: $breakpoints) {
-}
+// TBD
+// @function until($breakpoint-name, $breakpoints: $breakpoints) {
+// }
 
-@function between($breakpoint-name, $breakpoints: $breakpoints) {
-}
+// @function between($breakpoint-name, $breakpoints: $breakpoints) {
+// }
 
 /// @group mixins
 // Media query mixin?

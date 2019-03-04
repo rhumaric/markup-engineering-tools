@@ -1,0 +1,45 @@
+// $true-terminal-output: false;
+@import "true";
+@import "../units";
+
+@include describe("breakpoints") {
+  @include describe("px()") {
+    @include it("transforms em according to the $base-font-size") {
+      @include assert-equal(px(3em, 10px), 30px);
+    }
+    @include it("transforms rem according to the $base-font-size") {
+      @include assert-equal(px(3rem, 10px), 30px);
+    }
+    @include it("transforms % according to the $base-font-size") {
+      @include assert-equal(px(300%, 10px), 30px);
+    }
+    @include it(
+      "uses the default $base-font-size if no $base-font-size is set"
+    ) {
+      @include assert-equal(px(200%), 32px);
+    }
+  }
+
+  @include describe("strip-unit()") {
+    @include it("Removes the unit of provided number") {
+      @include assert-equal(strip-unit(5em), 5);
+    }
+  }
+
+  @include describe("length-ratio()") {
+    @include it("Returns a ratio of the lengths") {
+      @include assert-equal(length-ratio(10px, 5px), 2);
+      @include assert-equal(length-ratio(10em, 5em), 2);
+    }
+    @include it("Applies provided factor to the ratio") {
+      @include assert-equal(length-ratio(10px, 5px, 1em), 2em);
+      @include assert-equal(length-ratio(10px, 5px, 100%), 200%);
+    }
+    @include it("Converts lengths to px if in different units") {
+      @include assert-equal(length-ratio(2em, 50%, 1rem), 4rem);
+    }
+    @include it("Allows specifying the base-font-size") {
+      @include assert-equal(length-ratio(2em, 5px, 1rem, 10px), 4rem);
+    }
+  }
+}

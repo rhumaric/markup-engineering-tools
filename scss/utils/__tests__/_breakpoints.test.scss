@@ -1,9 +1,13 @@
 // TODO: Find a way to load these bits from the compiler
 $true-terminal-output: false;
 @import "true";
+@import "../breakpoints";
 
 @include describe("breakpoints") {
-  @include it("Tests something") {
-    @include assert-equal(1, 2);
+  @include describe("from") {
+    // See this for why em: https://zellwk.com/blog/media-query-units/
+    @include it("returns a min-width media query with unit in em") {
+      @include assert-equal(from(160px), "(min-width: 10em)");
+    }
   }
 }

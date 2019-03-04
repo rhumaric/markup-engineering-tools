@@ -13,15 +13,55 @@
 $base-font-size: 16px !default;
 
 @function em($length, $base-font-size: $base-font-size) {
-  @return length-ratio($length, $base-length, 1em);
+  @return length-ratio($length, $base-font-size, 1em);
 }
 
 @function rem($length, $base-font-size: $base-font-size) {
-  @return length-ratio($length, $base-length, 1rem);
+  @return length-ratio($length, $base-font-size, 1rem);
 }
 
-@function length-ratio($length, $base-length, $factor) {
+@function length-ratio(
+  $length,
+  $base-length,
+  $factor: 1,
+  $px-base-font-size: null
+) {
+  @if unit($length) != unit($base-length) {
+    @return (
+      $factor * px($length, $px-base-font-size) /
+        px($base-length, $px-base-font-size)
+    );
+  }
+
   @return ($factor * $length / $base-length);
+}
+
+// Converts a rem, em or % length into px (treating them as font-sizes)
+$browser-font-size: 16px !default;
+$base-font-size: 100% !default;
+@function px($length, $px-base-font-size: null) {
+  // TODO: Default $base-font-size to px($base-font-size, $browser-font-size)
+  // TODO: Throw if anothe unit is passed
+  // TODO: Test
+  @if $px-base-font-size == null {
+    $px-base-font-size: px($base-font-size, $browser-font-size);
+  }
+
+  @if unit($length) == "%" {
+    @return ($length / 100%) * $px-base-font-size;
+  }
+
+  @if unit($length) == "rem" {
+    @return strip-unit($length) * $px-base-font-size;
+  }
+
+  @if unit($length) == "em" {
+    @return strip-unit($length) * $px-base-font-size;
+  }
+
+  @if unit($length) == "px" {
+    @return $length;
+  }
 }
 
 // Foundation's strip-unit function
@@ -31,5 +71,5 @@ $base-font-size: 16px !default;
 ///
 /// @return {Number} The number, without its unit
 @function strip-unit($value) {
-  @return $num / ($num * 0 + 1);
+  @return $value / ($value * 0 + 1);
 }
