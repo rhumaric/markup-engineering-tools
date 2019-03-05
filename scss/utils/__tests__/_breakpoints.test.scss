@@ -8,6 +8,17 @@ $true-terminal-output: false;
     // See this for why em: https://zellwk.com/blog/media-query-units/
     @include it("returns a min-width media query with unit in em") {
       @include assert-equal(from(160px), "(min-width: 10em)");
+      @include assert-equal(from(10em), "(min-width: 10em)");
+      @include assert-equal(from(10rem), "(min-width: 10em)");
+    }
+
+    @include it("looks up values in the breakpoint map") {
+      $breakpoints: (
+        sm: 160px,
+        md: 320px
+      );
+      @include assert-equal(from(sm, $breakpoints), "(min-width: 10em)");
+      @include assert-equal(from("md", $breakpoints), "(min-width: 20em)");
     }
   }
 }

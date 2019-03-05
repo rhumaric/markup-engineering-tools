@@ -21,6 +21,10 @@ $breakpoints: (
 
 /// @group functions
 @function from($breakpoint, $breakpoints: $breakpoints) {
+  @if type-of($breakpoint) == "string" {
+    @return from(map-get($breakpoints, $breakpoint));
+  }
+
   @return "(min-width: #{em($breakpoint)})";
 }
 
