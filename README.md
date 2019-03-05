@@ -1,7 +1,7 @@
 Markup engineering toolbox
 ==========================
 
-> Gather in a HTML + CSS first framework small patterns that can be easily composed. Start with small patterns and build up to larger components, finally providing markup + CSS + JS for mor interactive patterns.
+> Gather in a CSS + HTML first list of patterns that can be easily composed. Start with small patterns and build up to larger components, finally providing markup + CSS + JS for mor interactive patterns.
 
 Principles
 ----------
