@@ -7,7 +7,8 @@
     "dev": "parcel scss/index.scss",
     "build": "parcel build scss/index.scss",
     "lint:css": "stylelint 'scss/**/*.scss'",
-    "test:css": "mocha --require=test/compiler.js --watch-extensions js,scss 'scss/**/*.test.scss'"
+    "test:css": "mocha --require=test/compiler.js --watch-extensions js,scss 'scss/**/*.test.scss'",
+    "test": "npm run test:css"
   },
   "repository": {
     "type": "git",

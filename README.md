@@ -1,6 +1,8 @@
 Markup engineering toolbox
 ==========================
 
+[![Build Status](https://travis-ci.org/rhumaric/markup-engineering-tools.svg?branch=master)](https://travis-ci.org/rhumaric/markup-engineering-tools)
+
 > Gather in a CSS + HTML first list of patterns that can be easily composed. Start with small patterns and build up to larger components, finally providing markup + CSS + JS for mor interactive patterns.
 
 Principles
