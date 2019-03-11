@@ -46,4 +46,32 @@ $true-terminal-output: false;
       );
     }
   }
+
+  @include describe("between()") {
+    @include it("combines a min-width and max-width media query") {
+      @include assert-equal(
+        between(160px, 320px),
+        "(min-width: 10em) and (max-width: 19.99875em)"
+      );
+      @include assert-equal(
+        between(10em, 20em),
+        "(min-width: 10em) and (max-width: 19.99875em)"
+      );
+      @include assert-equal(
+        between(10rem, 20rem),
+        "(min-width: 10em) and (max-width: 19.99875em)"
+      );
+    }
+
+    @include it("looks up the values in the breakpoints map") {
+      $breakpoints: (
+        sm: 160px,
+        md: 320px
+      );
+      @include assert-equal(
+        between(sm, md, $breakpoints),
+        "(min-width: 10em) and (max-width: 19.99875em)"
+      );
+    }
+  }
 }

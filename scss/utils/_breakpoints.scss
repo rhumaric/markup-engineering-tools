@@ -38,9 +38,12 @@ $breakpoints-max-offset: 0.00125em;
   @return "(max-width: #{em($breakpoint) - em($breakpoints-max-offset)})";
 }
 
-// TBD
-// @function between($breakpoint-name, $breakpoints: $breakpoints) {
-// }
+@function between($from, $until, $breakpoints: $breakpoints) {
+  $from-mq: from($from, $breakpoints);
+  $until-mq: until($until, $breakpoints);
+
+  @return "#{$from-mq} and #{$until-mq}";
+}
 
 /// @group mixins
 // Media query mixin?
