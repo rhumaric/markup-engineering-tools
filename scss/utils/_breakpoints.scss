@@ -6,6 +6,8 @@ $breakpoints: (
   lg: 1200
 );
 
+$breakpoints-max-offset: 0.00125em;
+
 @function breakpoint($breakpoint-name) {
   @return map-get($breakpoints, $breakpoint-name);
 }
@@ -28,10 +30,15 @@ $breakpoints: (
   @return "(min-width: #{em($breakpoint)})";
 }
 
-// TBD
-// @function until($breakpoint-name, $breakpoints: $breakpoints) {
-// }
+@function until($breakpoint, $breakpoints: $breakpoints) {
+  @if type-of($breakpoint) == "string" {
+    @return until(map-get($breakpoints, $breakpoint));
+  }
 
+  @return "(max-width: #{em($breakpoint) - em($breakpoints-max-offset)})";
+}
+
+// TBD
 // @function between($breakpoint-name, $breakpoints: $breakpoints) {
 // }
 

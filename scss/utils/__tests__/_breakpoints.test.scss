@@ -21,4 +21,29 @@ $true-terminal-output: false;
       @include assert-equal(from("md", $breakpoints), "(min-width: 20em)");
     }
   }
+
+  @include describe("until()") {
+    // Considering the breakpoint map provides the min values, the max values need to be a little before.
+    // 1px is not ideal for handling zoomed in browsers, but an arbitrary small values causes issus with how browsers interpret them
+    // Bootstrap uses a -0.02px https://github.com/twbs/bootstrap/blob/8896827bd072a120705a0576a5bcde69c8ce2cda/scss/mixins/_breakpoints.scss#L42
+    // Foundation follows Bootstrap, except with an em value (0.00125) https://github.com/zurb/foundation-sites/issues/11313#issuecomment-394003397
+    // So let's consider the max-width to be 0.02em under the value of the next breakpoint too
+    @include it("returns a max-width media query with unit in em") {
+      @include assert-equal(until(160px), "(max-width: 9.99875em)");
+      @include assert-equal(until(10em), "(max-width: 9.99875em)");
+      @include assert-equal(until(10rem), "(max-width: 9.99875em)");
+    }
+
+    @include it("looks up values in the breakpoint map") {
+      $breakpoints: (
+        sm: 160px,
+        md: 320px
+      );
+      @include assert-equal(until(sm, $breakpoints), "(max-width: 9.99875em)");
+      @include assert-equal(
+        until("md", $breakpoints),
+        "(max-width: 19.99875em)"
+      );
+    }
+  }
 }
