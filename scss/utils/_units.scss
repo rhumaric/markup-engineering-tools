@@ -59,9 +59,11 @@ $base-font-size: 100% !default;
     @return strip-unit($length) * $px-base-font-size;
   }
 
-  @if unit($length) == "px" {
-    @return $length;
+  @if unit($length) == "" {
+    @return $length * 1px;
   }
+
+  @return $length;
 }
 
 // Foundation's strip-unit function

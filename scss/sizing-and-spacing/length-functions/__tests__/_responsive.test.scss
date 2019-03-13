@@ -1,0 +1,56 @@
+// $true-terminal-output: false;
+@import "true";
+@import "../responsive";
+
+@include describe("responsive") {
+  @include describe("responsive()") {
+    @include it("creates the calc statement corresponding to the length") {
+      @include assert-equal(
+        responsive(24, 1440, 16, 320),
+        calc(1rem + 8 * (100vw - 320px) / 1120)
+      );
+    }
+    @include it(
+      "defaults all other attributes than the length to the set values"
+    ) {
+      $original-responsive-base-length: $responsive-base-length;
+      $original-responsive-base-viewport-width: $responsive-base-viewport-width;
+      $original-responsive-viewport-width: $responsive-viewport-width;
+
+      $responsive-base-length: 20 !global;
+      $responsive-base-viewport-width: 200 !global;
+      $responsive-viewport-width: 1200 !global;
+
+      @include assert-equal(
+        responsive(24),
+        calc(1.25rem + 4 * (100vw - 200px) / 1000)
+      );
+
+      $responsive-base-length: $original-responsive-base-length !global;
+      $responsive-base-viewport-width: $original-responsive-base-viewport-width !global;
+      $responsive-viewport-width: $original-responsive-viewport-width !global;
+    }
+  }
+
+  @include describe("@responsive()") {
+    @include it("sets the property to a responsive length") {
+      @include assert {
+        @include output {
+          @include responsive("font-size", 24, 1320, 16, 320);
+        }
+
+        @include expect {
+          font-size: 1.5rem;
+
+          @media (max-width: 82.49875em) {
+            font-size: calc(1rem + 8 * (100vw - 320px) / 1000);
+          }
+
+          @media (max-width: 19.99875em) {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

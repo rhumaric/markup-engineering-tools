@@ -130,7 +130,7 @@ To sum up, for this padding property, the classes would follow this order so eve
 4. `.no-pt`
 5. `.p-10p--from-sm`
 6. `.pt-10p--from-sm`
-7. `.pt-0--from-sm`
+7. `.no-pt--from-sm`
 
 Now let's complexify a bit and handle more complex component. Let's talk about a rythm pattern that would need some margin adjustment Ideally, it should be expressed with:
 
@@ -166,9 +166,9 @@ I guess the ideal order to cascade properly would be:
 .medium-pattern
 .small-pattern
 .no-pattern
+.large-pattern--from-sm
 .utility
 .no-utility
-.large-pattern--from-sm
 .utility--from-sm
 .no-utility--from-sm
 ```

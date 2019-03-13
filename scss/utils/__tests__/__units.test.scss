@@ -2,7 +2,7 @@
 @import "true";
 @import "../units";
 
-@include describe("breakpoints") {
+@include describe("units") {
   @include describe("px()") {
     @include it("transforms em according to the $base-font-size") {
       @include assert-equal(px(3em, 10px), 30px);
@@ -12,6 +12,9 @@
     }
     @include it("transforms % according to the $base-font-size") {
       @include assert-equal(px(300%, 10px), 30px);
+    }
+    @include it("treats unitless values as pixels") {
+      @include assert-equal(px(10), 10px);
     }
     @include it(
       "uses the default $base-font-size if no $base-font-size is set"

@@ -1,3 +1,6 @@
+@import "../../utils/units";
+@import "../../utils/breakpoints";
+
 $responsive-base-length: 16;
 $responsive-base-viewport-width: breakpoint(xs);
 $responsive-viewport-width: breakpoint(lg);
@@ -7,11 +10,18 @@ $responsive-viewport-width: breakpoint(lg);
 /// to `$length` at `$viewport-width`
 @function responsive(
   $length,
-  $viewport-width: $reponsive-viewport-width,
+  $viewport-width: $responsive-viewport-width,
   $base-length: $responsive-base-length,
   $base-viewport-width: $responsive-base-viewport-width
 ) {
-  // TODO: Do the maths
+  $length-growth: strip-unit(px($length) - px($base-length));
+  // String otherwise SASS will try to evaluate and fail due to unit difference
+  $viewport-ramp: "(100vw - #{px($base-viewport-width)})";
+  $viewport-base: strip-unit(px($viewport-width) - px($base-viewport-width));
+
+  // Silly, but prettier introduces a line-break that ends up in the generated calc
+  // we don't want that in the output so forcing things as string
+  @return #{"calc(#{rem($base-length)} + #{$length-growth} * #{$viewport-ramp} / #{$viewport-base})"};
 }
 
 // TODO: Allow $length to be described as a (breakpoint length) list?
@@ -21,17 +31,20 @@ $responsive-viewport-width: breakpoint(lg);
   $length,
   $viewport-width: $responsive-viewport-width,
   $base-length: $responsive-base-length,
-  $base-viewport-width: $responsive-base-viewport-width,
-  $breakpoint-type: max
+  $base-viewport-width: $responsive-base-viewport-width
 ) {
-  #{$property}: $length;
+  #{$property}: rem($length);
 
-  @media (max-width: $viewport-width) {
+  @media #{until($viewport-width)} {
     #{$property}: responsive(
       $length,
       $viewport-width,
       $base-length,
       $base-viewport-width
     );
+  }
+
+  @media #{until($base-viewport-width)} {
+    #{$property}: rem($base-length);
   }
 }
