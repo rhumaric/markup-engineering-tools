@@ -1,0 +1,31 @@
+@function value() {
+  @return $_mapping-value;
+}
+
+@function value-name() {
+  @return $_mapping-value-name;
+}
+
+@function scope-name() {
+  @return $_mapping-scope-name;
+}
+
+@function scope() {
+  @return $_mapping-scope-value;
+}
+
+// Unsure about whether the mapping is indeed responsive or more generic
+// For now, let's say it is, but maybe it's just a matter of mapping name mapping value?
+// Takes different signatures:
+// mapping($map, $constraints) => Runs content with all constraints and all values
+@mixin mapping($values, $scopes) {
+  @each $scope-name, $scope-value in $scopes {
+    $_mapping-scope-name: $scope-name !global;
+    $_mapping-scope-value: $scope-value !global;
+    @each $value-name, $value in $values {
+      $_mapping-value-name: $value-name !global;
+      $_mapping-value: $value !global;
+      @content;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+// stylelint-disable property-no-unknown
+$true-terminal-output: false;
+@import "true";
+@import "../_mapping";
+
+@include describe("@responsive-mapping()") {
+  @include it("generates combinations for each entry of both maps") {
+    @include assert {
+      @include output {
+        @include mapping(
+          (
+            a: 1,
+            b: 2
+          ),
+          (
+            c: 3,
+            d: 4
+          )
+        ) {
+          value: value();
+          value-name: value-name();
+          scope: scope();
+          scope-name: scope-name();
+        }
+      }
+
+      @include expect {
+        // stylelint-disable declaration-block-no-duplicate-properties
+        value: 1;
+        value-name: a;
+        scope: 3;
+        scope-name: c;
+        value: 2;
+        value-name: b;
+        scope: 3;
+        scope-name: c;
+        value: 1;
+        value-name: a;
+        scope: 4;
+        scope-name: d;
+        value: 2;
+        value-name: b;
+        scope: 4;
+        scope-name: d;
+      }
+    }
+  }
+}
