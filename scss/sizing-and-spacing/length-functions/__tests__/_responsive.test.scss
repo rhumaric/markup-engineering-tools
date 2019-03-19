@@ -52,5 +52,103 @@
         }
       }
     }
+    @include it(
+      "reverses breakpoints and values if base-viewport-width > viewport-width"
+    ) {
+      @include assert {
+        @include output {
+          @include responsive("font-size", 16, 320, 24, 1320);
+        }
+
+        @include expect {
+          font-size: 1.5rem;
+
+          @media (max-width: 82.49875em) {
+            font-size: calc(1rem + 8 * (100vw - 320px) / 1000);
+          }
+
+          @media (max-width: 19.99875em) {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+    @include describe("$include-bounds") {
+      @include it("`start` only sets the start bound") {
+        @include assert {
+          @include output {
+            @include responsive("font-size", 24, 1320, 16, 320, $bounds: start);
+          }
+
+          @include expect {
+            font-size: 1.5rem;
+
+            @media (max-width: 82.49875em) {
+              font-size: calc(1rem + 8 * (100vw - 320px) / 1000);
+            }
+          }
+        }
+      }
+      @include it("`end` only sets the end bound") {
+        @include assert {
+          @include output {
+            @include responsive("font-size", 24, 1320, 16, 320, $bounds: end);
+          }
+
+          @include expect {
+            @media (max-width: 82.49875em) {
+              font-size: calc(1rem + 8 * (100vw - 320px) / 1000);
+            }
+
+            @media (max-width: 19.99875em) {
+              font-size: 1rem;
+            }
+          }
+        }
+      }
+      @include it("`none` removes both bounds") {
+        @include assert {
+          @include output {
+            @include responsive("font-size", 24, 1320, 16, 320, $bounds: none);
+          }
+
+          @include expect {
+            @media (max-width: 82.49875em) {
+              font-size: calc(1rem + 8 * (100vw - 320px) / 1000);
+            }
+          }
+        }
+      }
+    }
+
+    @include describe("$direction") {
+      @include it("`asc` generates min-width media queries") {
+        @include assert {
+          @include output {
+            @include responsive(
+              "font-size",
+              16,
+              320,
+              24,
+              1320,
+              $direction: asc
+            );
+          }
+
+          @include expect {
+            font-size: 1rem;
+
+            @media (min-width: 20em) {
+              font-size: calc(1rem + 8 * (100vw - 320px) / 1000);
+            }
+
+            @media (min-width: 82.5em) {
+              font-size: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+    // TODO: Introduce a $direction param to decide between min and max media queries
   }
 }

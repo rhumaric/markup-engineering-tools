@@ -31,20 +31,77 @@ $responsive-viewport-width: breakpoint(lg);
   $length,
   $viewport-width: $responsive-viewport-width,
   $base-length: $responsive-base-length,
-  $base-viewport-width: $responsive-base-viewport-width
+  $base-viewport-width: $responsive-base-viewport-width,
+  $bounds: both,
+  $direction: desc
 ) {
-  #{$property}: rem($length);
-
-  @media #{until($viewport-width)} {
-    #{$property}: responsive(
+  @if (px($viewport-width) < px($base-viewport-width)) {
+    @include responsive(
+      $property,
+      $base-length,
+      $base-viewport-width,
       $length,
       $viewport-width,
-      $base-length,
-      $base-viewport-width
+      $bounds,
+      $direction
     );
+  } @else {
+    @if ($direction == desc) {
+      @include _render_responsive(
+        $property: $property,
+        $start-value: rem($length),
+        $responsive-mq: until($viewport-width),
+        $responsive-value:
+          responsive(
+            $length,
+            $viewport-width,
+            $base-length,
+            $base-viewport-width
+          ),
+        $end-mq: until($base-viewport-width),
+        $end-value: rem($base-length),
+        $bounds: $bounds
+      );
+    } @else {
+      @include _render_responsive(
+        $property: $property,
+        $start-value: rem($base-length),
+        $responsive-mq: from($base-viewport-width),
+        $responsive-value:
+          responsive(
+            $length,
+            $viewport-width,
+            $base-length,
+            $base-viewport-width
+          ),
+        $end-mq: from($viewport-width),
+        $end-value: rem($length),
+        $bounds: $bounds
+      );
+    }
+  }
+}
+
+@mixin _render_responsive(
+  $property,
+  $start-value,
+  $responsive-mq,
+  $responsive-value,
+  $end-mq,
+  $end-value,
+  $bounds
+) {
+  @if ($bounds == start) or ($bounds == both) {
+    #{$property}: $start-value;
   }
 
-  @media #{until($base-viewport-width)} {
-    #{$property}: rem($base-length);
+  @media #{$responsive-mq} {
+    #{$property}: $responsive-value;
+  }
+
+  @if ($bounds == end) or ($bounds == both) {
+    @media #{$end-mq} {
+      #{$property}: $end-value;
+    }
   }
 }
