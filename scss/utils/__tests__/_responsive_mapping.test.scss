@@ -1,0 +1,13 @@
+// stylelint-disable property-no-unknown
+$true-terminal-output: false;
+@import "true";
+@import "../_responsive-mapping";
+
+@include describe("@responsive-mapping()") {
+  // Filtering:
+  // - List of breakpoints => generates from, then (?) until breakpoints
+  // - (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
+  // - (from: (breakpoint_key: <list_of_value_keys>,...) => only generates from and until breakpoints for the listed breakpoints
+  // Handle the naming? Automatically create .<basename>-<value_key>-[from|until]-<responsive-key> classes
+  @error "Not implmemented";
+}

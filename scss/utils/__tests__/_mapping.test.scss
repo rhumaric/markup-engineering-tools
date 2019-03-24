@@ -3,7 +3,7 @@ $true-terminal-output: false;
 @import "true";
 @import "../_mapping";
 
-@include describe("@responsive-mapping()") {
+@include describe("@mapping()") {
   @include it("generates combinations for each entry of both maps") {
     @include assert {
       @include output {
