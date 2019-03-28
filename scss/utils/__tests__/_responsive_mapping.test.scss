@@ -9,5 +9,5 @@ $true-terminal-output: false;
   // - (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
   // - (from: (breakpoint_key: <list_of_value_keys>,...) => only generates from and until breakpoints for the listed breakpoints
   // Handle the naming? Automatically create .<basename>-<value_key>-[from|until]-<responsive-key> classes
-  @error "Not implmemented";
+  // TODO: Implement
 }
