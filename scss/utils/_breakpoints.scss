@@ -1,4 +1,5 @@
 @import "units";
+@import "map";
 
 /// @group maps
 $breakpoints: (
@@ -12,13 +13,8 @@ $breakpoints-max-offset: 0.00125em;
   @return map-get($breakpoints, $breakpoint-name);
 }
 
-@mixin add-breakpoint($name, $viewport-width, $breakpoints: $breakpoints) {
-  // From sass-mq
-  $new-breakpoint: (
-    $name: $viewport-width
-  );
-  $mq-breakpoints: map-merge($breakpoints, $new-breakpoint);
-  // SASS-MQ sorts the breakpoints by ascending order. Not sure of the gain here?
+@function set-breakpoint($name, $viewport-width, $breakpoints: $breakpoints) {
+  @return map-set($breakpoints, $name, $viewport-width, $sort: true);
 }
 
 /// @group functions
@@ -46,4 +42,7 @@ $breakpoints-max-offset: 0.00125em;
 }
 
 /// @group mixins
+@mixin set-breakpoint($name, $value) {
+  $breakpoints: add-breakpoint($name, $value) !global;
+}
 // Media query mixin?

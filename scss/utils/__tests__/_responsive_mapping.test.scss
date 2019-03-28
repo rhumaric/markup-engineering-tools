@@ -3,11 +3,64 @@ $true-terminal-output: false;
 @import "true";
 @import "../_responsive-mapping";
 
+// EXTERNAL: Create a map function that appends a (none: 0) value at the end
+// EXTERNAL: Create a naming function that can be used for generating consistent naming
+//           classname($pattern, $value, $breakpoint-type, $breakpoint-name)
+// EXTERNAL: Create naming function for the BEM naming scheme (b(),e(),m())
+//           issue is that they should probably be mixins, but writing @include b() defeats the point a bit...
+
 @include describe("@responsive-mapping()") {
   // Filtering:
   // - List of breakpoints => generates from, then (?) until breakpoints
   // - (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
   // - (from: (breakpoint_key: <list_of_value_keys>,...) => only generates from and until breakpoints for the listed breakpoints
   // Handle the naming? Automatically create .<basename>-<value_key>-[from|until]-<responsive-key> classes
-  // TODO: Implement
+  $values: (
+    1: 50%,
+    2: 100%
+  );
+
+  // Sorting is resposibility of caller
+  $breakpoints: (
+    sm: 160px,
+    md: 320px lg: 640px
+  );
+
+  // Little helper to help outputing the content of values
+  @mixin output-responsive-mapping(
+    $values: $values,
+    $mapping,
+    $breakpoints: $breakpoints
+  ) {
+    @include output {
+      @include responsive-mapping($values, $mapping, $breakpoints) {
+        value: $value;
+        value-name: $value-name;
+        scope: $scope;
+        scope-name: $scope-name;
+      }
+    }
+  }
+
+  @include describe("$mapping.from") {
+    @include describe("list") {
+      @include it("Generates min-width breakpoints for from mapping") {
+        @include assert {
+          @include output-responsive-mapping(
+            $mapping: (
+              from: sm,
+              lg
+            )
+          );
+          @include expect {
+            // boo!
+          }
+        }
+      }
+    }
+  }
+
+  // Same for until
+  // Introduce `all` parameter
+  // Support no parameter (ie. all: map-keys($breakpoints))
 }
