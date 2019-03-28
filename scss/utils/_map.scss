@@ -25,3 +25,24 @@
 
   @return $map-sorted;
 }
+
+@function map-set($map, $key-or-list-or-map, $value: null, $sort: false) {
+  $update: map-from($key-or-list-or-map, $value);
+  $merged: map-merge($map, $update);
+
+  @if ($sort) {
+    @return map-sort-by-value($merged);
+  }
+
+  @return $merged;
+}
+
+@function map-from($key-or-list-or-map, $value: null) {
+  @if type-of($key-or-list-or-map) == "map" {
+    @return $key-or-list-or-map;
+  } @else if type-of($key-or-list-or-map) == "list" {
+    @return (nth($key-or-list-or-map, 1): nth($key-or-list-or-map, 2));
+  } @else {
+    @return ($key-or-list-or-map: $value);
+  }
+}

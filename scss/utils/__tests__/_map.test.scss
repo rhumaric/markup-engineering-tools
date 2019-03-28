@@ -22,3 +22,94 @@ $true-terminal-output: false;
     );
   }
 }
+
+@include describe("map-set()") {
+  @include it("updates the value if the key exists") {
+    @include assert-equal(
+      map-set(
+        (
+          a: 1,
+          b: 2
+        ),
+        b,
+        3
+      ),
+      (
+        a: 1,
+        b: 3
+      )
+    );
+  }
+  @include it("appends the value if the key does not exist") {
+    @include assert-equal(
+      map-set(
+        (
+          a: 1,
+          b: 2
+        ),
+        c,
+        3
+      ),
+      (
+        a: 1,
+        b: 2,
+        c: 3
+      )
+    );
+  }
+  @include it("accepts the update as a list") {
+    @include assert-equal(
+      map-set(
+        (
+          a: 1,
+          b: 2
+        ),
+        (c 3)
+      ),
+      (
+        a: 1,
+        b: 2,
+        c: 3
+      )
+    );
+  }
+  @include it("accepts the update as a map") {
+    @include assert-equal(
+      map-set(
+        (
+          a: 1,
+          b: 2
+        ),
+        (
+          c: 3
+        )
+      ),
+      (
+        a: 1,
+        b: 2,
+        c: 3
+      )
+    );
+  }
+  // TODO: Handle keys as list and values as list
+  // TODO: Handle list of pairs
+  @include describe("$sort") {
+    @include it("sorts the map by values if true") {
+      $initial: (
+        a: 3,
+        b: 1
+      );
+      $actual: map-set($initial, c, 2, $sort: true);
+      @include assert-equal(
+        map-keys($actual),
+        map-keys(
+          (
+            b: 1,
+            c: 2,
+            a: 3
+          )
+        )
+      );
+    }
+  }
+}
