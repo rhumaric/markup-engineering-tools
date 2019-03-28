@@ -1,0 +1,24 @@
+// TODO: Find a way to load these bits from the compiler
+$true-terminal-output: false;
+@import "true";
+@import "../map";
+
+@include describe("map-sort-by-value()") {
+  @include it("sorts the map in ascending order of values") {
+    $initial-map: (
+      sm: 640,
+      lg: 1200,
+      xs: 375,
+      md: 768
+    );
+    @include assert-equal(
+      map-sort-by-value($initial-map),
+      (
+        xs: 375,
+        sm: 640,
+        md: 768,
+        lg: 1200
+      )
+    );
+  }
+}
