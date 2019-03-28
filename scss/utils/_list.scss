@@ -1,0 +1,30 @@
+// From sass-mq: https://github.com/sass-mq/sass-mq/blob/master/_mq.scss
+/// Quick sort
+///
+/// @author Sam Richards
+/// @access private
+/// @param {List} $list - List to sort
+/// @returns {List} Sorted List
+@function list-sort($list) {
+  $less: ();
+  $equal: ();
+  $large: ();
+
+  @if length($list) > 1 {
+    $seed: nth($list, ceil(length($list) / 2));
+
+    @each $item in $list {
+      @if ($item == $seed) {
+        $equal: append($equal, $item);
+      } @else if ($item < $seed) {
+        $less: append($less, $item);
+      } @else if ($item > $seed) {
+        $large: append($large, $item);
+      }
+    }
+
+    @return join(join(list-sort($less), $equal), list-sort($large));
+  }
+
+  @return $list;
+}

@@ -1,0 +1,10 @@
+// TODO: Find a way to load these bits from the compiler
+$true-terminal-output: false;
+@import "true";
+@import "../list";
+
+@include describe("list-sort()") {
+  @include it("sorts the list in ascending order") {
+    @include assert-equal(list-sort((640, 1200, 375, 768)), (375 640 768 1200));
+  }
+}
