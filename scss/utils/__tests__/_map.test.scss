@@ -113,3 +113,21 @@ $true-terminal-output: false;
     }
   }
 }
+
+@include describe("map-pick()") {
+  @include it("Picks selected keys from the map") {
+    $map: (
+      a: 1,
+      b: 2,
+      c: 3,
+      d: 4
+    );
+    @include assert-equal(
+      map-pick($map, (b, d)),
+      (
+        b: 2,
+        d: 4
+      )
+    );
+  }
+}

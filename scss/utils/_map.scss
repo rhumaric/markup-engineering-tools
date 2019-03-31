@@ -46,3 +46,16 @@
     @return ($key-or-list-or-map: $value);
   }
 }
+
+@function map-pick($map, $keys) {
+  $picks: ();
+  @each $key in $keys {
+    $picks: map-merge(
+      $picks,
+      (
+        $key: map-get($map, $key)
+      )
+    );
+  }
+  @return $picks;
+}
