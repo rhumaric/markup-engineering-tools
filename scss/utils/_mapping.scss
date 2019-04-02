@@ -14,11 +14,16 @@
   @return $_mapping-scope-value;
 }
 
+@function context() {
+  @return $_mapping-context;
+}
+
 // Unsure about whether the mapping is indeed responsive or more generic
 // For now, let's say it is, but maybe it's just a matter of mapping name mapping value?
 // Takes different signatures:
 // mapping($map, $constraints) => Runs content with all constraints and all values
-@mixin mapping($values, $scopes) {
+@mixin mapping($values, $scopes, $context: null) {
+  $_mapping-context: $context !global;
   @each $scope-name, $scope-value in $scopes {
     $_mapping-scope-name: $scope-name !global;
     $_mapping-scope-value: $scope-value !global;

@@ -45,4 +45,36 @@ $true-terminal-output: false;
       }
     }
   }
+
+  @include describe("$context") {
+    @include it("gets provided to enclosed content") {
+      @include assert {
+        @include output {
+          @include mapping(
+            (
+              a: 1
+            ),
+            (
+              b: 2
+            ),
+            25
+          ) {
+            value: value();
+            value-name: value-name();
+            scope: scope();
+            scope-name: scope-name();
+            context: context();
+          }
+        }
+
+        @include expect {
+          value: 1;
+          value-name: a;
+          scope: 2;
+          scope-name: b;
+          context: 25;
+        }
+      }
+    }
+  }
 }
