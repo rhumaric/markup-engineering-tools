@@ -9,51 +9,75 @@ $true-terminal-output: false;
 // EXTERNAL: Create naming function for the BEM naming scheme (b(),e(),m())
 //           issue is that they should probably be mixins, but writing @include b() defeats the point a bit...
 
-@include describe("@responsive-mapping()") {
-  // Filtering:
-  // - List of breakpoints => generates from, then (?) until breakpoints
-  // - (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
-  // - (from: (breakpoint_key: <list_of_value_keys>,...) => only generates from and until breakpoints for the listed breakpoints
-  // Handle the naming? Automatically create .<basename>-<value_key>-[from|until]-<responsive-key> classes
-  $values: (
-    1: 50%,
-    2: 100%
-  );
+// Filtering:
+// - List of breakpoints => generates from, then (?) until breakpoints
+// - (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
+// - (from: (breakpoint_key: <list_of_value_keys>,...) => only generates from and until breakpoints for the listed breakpoints
+// Handle the naming? Automatically create .<basename>-<value_key>-[from|until]-<responsive-key> classes
+$values: (
+  1: 50%,
+  2: 100%
+);
 
-  // Sorting is resposibility of caller
-  $breakpoints: (
-    sm: 160px,
-    md: 320px lg: 640px
-  );
+// Sorting is resposibility of caller
+$breakpoints: (
+  sm: 160px,
+  md: 320px,
+  lg: 640px
+);
 
-  // Little helper to help outputing the content of values
-  @mixin output-responsive-mapping(
-    $values: $values,
-    $mapping,
-    $breakpoints: $breakpoints
-  ) {
-    @include output {
-      @include responsive-mapping($values, $mapping, $breakpoints) {
-        value: $value;
-        value-name: $value-name;
-        scope: $scope;
-        scope-name: $scope-name;
-      }
+// Little helper to help outputing the content of values
+@mixin output-responsive-mapping(
+  $mapping,
+  $values: $values,
+  $breakpoints: $breakpoints
+) {
+  @include output {
+    @include responsive-mapping($values, $mapping, $breakpoints) {
+      value: value();
+      value-name: value-name();
+      scope: scope();
+      scope-name: scope-name();
+      context: map-get(context(), breakpoint-type);
     }
   }
+}
 
+@include describe("@responsive-mapping()") {
   @include describe("$mapping.from") {
     @include describe("list") {
       @include it("Generates min-width breakpoints for from mapping") {
         @include assert {
           @include output-responsive-mapping(
             $mapping: (
-              from: sm,
-              lg
+              from: (
+                sm,
+                lg
+              )
             )
           );
           @include expect {
-            // boo!
+            // stylelint-disable declaration-block-no-duplicate-properties
+            value: 50%;
+            value-name: 1;
+            scope: "(min-width: 10em)";
+            scope-name: sm;
+            context: from;
+            value: 100%;
+            value-name: 2;
+            scope: "(min-width: 10em)";
+            scope-name: sm;
+            context: from;
+            value: 50%;
+            value-name: 1;
+            scope: "(min-width: 40em)";
+            scope-name: lg;
+            context: from;
+            value: 100%;
+            value-name: 2;
+            scope: "(min-width: 40em)";
+            scope-name: lg;
+            context: from;
           }
         }
       }

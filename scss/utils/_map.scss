@@ -59,3 +59,17 @@
   }
   @return $picks;
 }
+
+@function map-map($map, $function) {
+  $mapped: ();
+  @each $key, $value in $map {
+    $mapped-value: call(get-function($function), $value, $key);
+    $mapped: map-merge(
+      $mapped,
+      (
+        $key: $mapped-value
+      )
+    );
+  }
+  @return $mapped;
+}
