@@ -1,6 +1,3 @@
-// TODO: Find a way to load these bits from the compiler
-$true-terminal-output: false;
-@import "true";
 @import "../list";
 
 @include describe("list-sort()") {

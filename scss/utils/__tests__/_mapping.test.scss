@@ -1,6 +1,4 @@
 // stylelint-disable property-no-unknown
-$true-terminal-output: false;
-@import "true";
 @import "../_mapping";
 
 @include describe("@mapping()") {
