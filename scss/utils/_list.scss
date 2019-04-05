@@ -4,11 +4,12 @@
 /// @author Sam Richards
 /// @access private
 /// @param {List} $list - List to sort
+/// @param {String} $order - asc (default) for ascending, desc for descending
 /// @returns {List} Sorted List
-@function list-sort($list) {
-  $less: ();
+@function list-sort($list, $order: asc) {
+  $before: ();
   $equal: ();
-  $large: ();
+  $after: ();
 
   @if length($list) > 1 {
     $seed: nth($list, ceil(length($list) / 2));
@@ -16,14 +17,21 @@
     @each $item in $list {
       @if ($item == $seed) {
         $equal: append($equal, $item);
+      } @else if ($order == desc) and ($item > $seed) {
+        $before: append($before, $item);
+      } @else if ($order == desc) and ($item < $seed) {
+        $after: append($after, $item);
       } @else if ($item < $seed) {
-        $less: append($less, $item);
+        $before: append($before, $item);
       } @else if ($item > $seed) {
-        $large: append($large, $item);
+        $after: append($after, $item);
       }
     }
 
-    @return join(join(list-sort($less), $equal), list-sort($large));
+    @return join(
+      join(list-sort($before, $order), $equal),
+      list-sort($after, $order)
+    );
   }
 
   @return $list;

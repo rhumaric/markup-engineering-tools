@@ -3,19 +3,23 @@
 @import "breakpoints";
 
 @mixin responsive-mapping($values, $mapping: null, $breakpoints: $breakpoints) {
-  $breakpoint-type: from;
-  $from-breakpoints: map-pick(
-    $breakpoints,
-    map-get($mapping, $breakpoint-type)
-  );
-  $from-breakpoints: map-map($from-breakpoints, $breakpoint-type);
-  @include mapping(
-    $values,
-    $from-breakpoints,
-    (
-      breakpoint-type: $breakpoint-type
-    )
-  ) {
-    @content;
+  @each $breakpoint-type in (from, until) {
+    $breakpoint-list: map-get($mapping, $breakpoint-type);
+    @if ($breakpoint-list) {
+      $from-breakpoints: map-pick($breakpoints, $breakpoint-list);
+      @if ($breakpoint-type == until) {
+        $from-breakpoints: map-sort-by-value($from-breakpoints, desc);
+      }
+      $from-breakpoints: map-map($from-breakpoints, $breakpoint-type);
+      @include mapping(
+        $values,
+        $from-breakpoints,
+        (
+          breakpoint-type: $breakpoint-type
+        )
+      ) {
+        @content;
+      }
+    }
   }
 }

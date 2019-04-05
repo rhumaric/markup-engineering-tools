@@ -4,4 +4,13 @@
   @include it("sorts the list in ascending order") {
     @include assert-equal(list-sort((640, 1200, 375, 768)), (375 640 768 1200));
   }
+
+  @include describe("$order") {
+    @include it("`desc` sorts the list in descending order") {
+      @include assert-equal(
+        list-sort((640, 1200, 375, 768), $order: desc),
+        (1200 768 640 375)
+      );
+    }
+  }
 }

@@ -1,11 +1,11 @@
 @import "./list";
 
 // From sass-mq: https://github.com/sass-mq/sass-mq/blob/master/_mq.scss#L271
-@function map-sort-by-value($map) {
+@function map-sort-by-value($map, $order: asc) {
   $map-sorted: ();
   $map-keys: map-keys($map);
   $map-values: map-values($map);
-  $map-values-sorted: list-sort($map-values);
+  $map-values-sorted: list-sort($map-values, $order);
 
   // Reorder key/value pairs based on key values
   @each $value in $map-values-sorted {

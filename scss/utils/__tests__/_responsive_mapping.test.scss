@@ -82,6 +82,45 @@ $breakpoints: (
     }
   }
 
+  @include describe("$mapping.until") {
+    @include describe("list") {
+      @include it("Generates max-width breakpoints for until mapping") {
+        @include assert {
+          @include output-responsive-mapping(
+            $mapping: (
+              until: (
+                sm,
+                lg
+              )
+            )
+          );
+          @include expect {
+            value: 50%;
+            value-name: 1;
+            scope: "(max-width: 39.99875em)";
+            scope-name: lg;
+            context: until;
+            value: 100%;
+            value-name: 2;
+            scope: "(max-width: 39.99875em)";
+            scope-name: lg;
+            context: until;
+            value: 50%;
+            value-name: 1;
+            scope: "(max-width: 9.99875em)";
+            scope-name: sm;
+            context: until;
+            value: 100%;
+            value-name: 2;
+            scope: "(max-width: 9.99875em)";
+            scope-name: sm;
+            context: until;
+          }
+        }
+      }
+    }
+  }
+
   // Same for until
   // Introduce `all` parameter
   // Support no parameter (ie. all: map-keys($breakpoints))
