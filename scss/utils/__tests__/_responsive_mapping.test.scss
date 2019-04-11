@@ -9,9 +9,11 @@
 
 // Filtering:
 // - List of breakpoints => generates from, then (?) until breakpoints
-// - (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
+// x (from:<breakpoints_keys>, until:breakpoints_keys) map => only generates from and until breakpoints for the listed breakpoints
 // - (from: (breakpoint_key: <list_of_value_keys>,...) => only generates from and until breakpoints for the listed breakpoints
 // Handle the naming? Automatically create .<basename>-<value_key>-[from|until]-<responsive-key> classes
+// Maybe: add an all key that would be merged into both from and until lists
+// Maybe: add option for configuring order, from or until first
 $values: (
   1: 50%,
   2: 100%
@@ -41,42 +43,52 @@ $breakpoints: (
   }
 }
 
+@mixin test-responsive-mapping(
+  $mapping,
+  $values: $values,
+  $breakpoints: $breakpoints
+) {
+  @include assert {
+    @include output-responsive-mapping($mapping, $values, $breakpoints);
+    @include expect {
+      @content;
+    }
+  }
+}
+
 @include describe("@responsive-mapping()") {
   @include describe("$mapping.from") {
     @include describe("list") {
       @include it("Generates min-width breakpoints for from mapping") {
-        @include assert {
-          @include output-responsive-mapping(
-            $mapping: (
-              from: (
-                sm,
-                lg
-              )
+        @include test-responsive-mapping(
+          $mapping: (
+            from: (
+              sm,
+              lg
             )
-          );
-          @include expect {
-            // stylelint-disable declaration-block-no-duplicate-properties
-            value: 50%;
-            value-name: 1;
-            scope: "(min-width: 10em)";
-            scope-name: sm;
-            context: from;
-            value: 100%;
-            value-name: 2;
-            scope: "(min-width: 10em)";
-            scope-name: sm;
-            context: from;
-            value: 50%;
-            value-name: 1;
-            scope: "(min-width: 40em)";
-            scope-name: lg;
-            context: from;
-            value: 100%;
-            value-name: 2;
-            scope: "(min-width: 40em)";
-            scope-name: lg;
-            context: from;
-          }
+          )
+        ) {
+          // stylelint-disable declaration-block-no-duplicate-properties
+          value: 50%;
+          value-name: 1;
+          scope: "(min-width: 10em)";
+          scope-name: sm;
+          context: from;
+          value: 100%;
+          value-name: 2;
+          scope: "(min-width: 10em)";
+          scope-name: sm;
+          context: from;
+          value: 50%;
+          value-name: 1;
+          scope: "(min-width: 40em)";
+          scope-name: lg;
+          context: from;
+          value: 100%;
+          value-name: 2;
+          scope: "(min-width: 40em)";
+          scope-name: lg;
+          context: from;
         }
       }
     }
@@ -85,38 +97,86 @@ $breakpoints: (
   @include describe("$mapping.until") {
     @include describe("list") {
       @include it("Generates max-width breakpoints for until mapping") {
-        @include assert {
-          @include output-responsive-mapping(
-            $mapping: (
-              until: (
-                sm,
-                lg
-              )
+        @include test-responsive-mapping(
+          $mapping: (
+            until: (
+              sm,
+              lg
             )
-          );
-          @include expect {
-            value: 50%;
-            value-name: 1;
-            scope: "(max-width: 39.99875em)";
-            scope-name: lg;
-            context: until;
-            value: 100%;
-            value-name: 2;
-            scope: "(max-width: 39.99875em)";
-            scope-name: lg;
-            context: until;
-            value: 50%;
-            value-name: 1;
-            scope: "(max-width: 9.99875em)";
-            scope-name: sm;
-            context: until;
-            value: 100%;
-            value-name: 2;
-            scope: "(max-width: 9.99875em)";
-            scope-name: sm;
-            context: until;
-          }
+          )
+        ) {
+          value: 50%;
+          value-name: 1;
+          scope: "(max-width: 39.99875em)";
+          scope-name: lg;
+          context: until;
+          value: 100%;
+          value-name: 2;
+          scope: "(max-width: 39.99875em)";
+          scope-name: lg;
+          context: until;
+          value: 50%;
+          value-name: 1;
+          scope: "(max-width: 9.99875em)";
+          scope-name: sm;
+          context: until;
+          value: 100%;
+          value-name: 2;
+          scope: "(max-width: 9.99875em)";
+          scope-name: sm;
+          context: until;
         }
+      }
+    }
+  }
+
+  // TODO: Test $breakpoints parameter, might need map-map adjustments
+
+  @include describe("$mapping as list") {
+    @include it(
+      "Generates both from and until breakpoints for listed breakpoints"
+    ) {
+      @include test-responsive-mapping((sm, lg)) {
+        value: 50%;
+        value-name: 1;
+        scope: "(min-width: 10em)";
+        scope-name: sm;
+        context: from;
+        value: 100%;
+        value-name: 2;
+        scope: "(min-width: 10em)";
+        scope-name: sm;
+        context: from;
+        value: 50%;
+        value-name: 1;
+        scope: "(min-width: 40em)";
+        scope-name: lg;
+        context: from;
+        value: 100%;
+        value-name: 2;
+        scope: "(min-width: 40em)";
+        scope-name: lg;
+        context: from;
+        value: 50%;
+        value-name: 1;
+        scope: "(max-width: 39.99875em)";
+        scope-name: lg;
+        context: until;
+        value: 100%;
+        value-name: 2;
+        scope: "(max-width: 39.99875em)";
+        scope-name: lg;
+        context: until;
+        value: 50%;
+        value-name: 1;
+        scope: "(max-width: 9.99875em)";
+        scope-name: sm;
+        context: until;
+        value: 100%;
+        value-name: 2;
+        scope: "(max-width: 9.99875em)";
+        scope-name: sm;
+        context: until;
       }
     }
   }
