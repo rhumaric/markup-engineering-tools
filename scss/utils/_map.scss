@@ -60,10 +60,10 @@
   @return $picks;
 }
 
-@function map-map($map, $function) {
+@function map-map($map, $function, $params...) {
   $mapped: ();
   @each $key, $value in $map {
-    $mapped-value: call(get-function($function), $value, $key);
+    $mapped-value: call(get-function($function), $value, $key, $params...);
     $mapped: map-merge(
       $mapped,
       (

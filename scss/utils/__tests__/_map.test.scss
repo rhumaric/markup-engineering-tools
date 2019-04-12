@@ -143,3 +143,52 @@
     );
   }
 }
+
+@function test-map-map-increment($number, $key, $amount: 1, $extra-amount: 0) {
+  @return $number + $amount + $extra-amount;
+}
+
+@include describe("map-map()") {
+  $map: (
+    a: 1,
+    b: 2,
+    c: 3
+  );
+
+  @include it("Runs provided function over each item of the map") {
+    @include assert-equal(
+      map-map($map, test-map-map-increment),
+      (
+        a: 2,
+        b: 3,
+        c: 4
+      )
+    );
+  }
+
+  @include describe("$params") {
+    @include it("Gets passes to the provided function as extra parameters") {
+      @include assert-equal(
+        map-map($map, test-map-map-increment, 2),
+        (
+          a: 3,
+          b: 4,
+          c: 5
+        )
+      );
+    }
+
+    @include it(
+      "Allows multiple arguments to be provided as extra parameters"
+    ) {
+      @include assert-equal(
+        map-map($map, test-map-map-increment, 2, 3),
+        (
+          a: 6,
+          b: 7,
+          c: 8
+        )
+      );
+    }
+  }
+}
