@@ -1,3 +1,5 @@
+@import "map";
+
 @function value() {
   @return $_mapping-value;
 }
@@ -22,15 +24,30 @@
 // For now, let's say it is, but maybe it's just a matter of mapping name mapping value?
 // Takes different signatures:
 // mapping($map, $constraints) => Runs content with all constraints and all values
-@mixin mapping($values, $scopes, $context: null) {
+@mixin mapping($values, $scopes, $context: null, $values-filter: null) {
   $_mapping-context: $context !global;
   @each $scope-name, $scope-value in $scopes {
     $_mapping-scope-name: $scope-name !global;
     $_mapping-scope-value: $scope-value !global;
-    @each $value-name, $value in $values {
+    $filtered-values: mapping-filter-values(
+      $values,
+      $scope-name,
+      $values-filter
+    );
+    @each $value-name, $value in $filtered-values {
       $_mapping-value-name: $value-name !global;
       $_mapping-value: $value !global;
       @content;
     }
   }
+}
+
+@function mapping-filter-values($values, $scope-name, $values-filter) {
+  $filtered-values: $values;
+  @if ($values-filter) {
+    @if (map-has-key($values-filter, $scope-name)) {
+      $filtered-values: map-pick($values, map-get($values-filter, $scope-name));
+    }
+  }
+  @return $filtered-values;
 }

@@ -1,77 +1,119 @@
 // stylelint-disable property-no-unknown
 @import "../_mapping";
 
+@mixin mapping-output($values, $scopes, $context: null, $values-filter: null) {
+  @include mapping(
+    $values,
+    $scopes,
+    $context: $context,
+    $values-filter: $values-filter
+  ) {
+    value: value();
+    value-name: value-name();
+    scope: scope();
+    scope-name: scope-name();
+    @if $context {
+      context: context();
+    }
+  }
+}
+
+@mixin test-mapping-output(
+  $values,
+  $scopes,
+  $context: null,
+  $values-filter: null
+) {
+  @include assert {
+    @include output {
+      @include mapping-output($values, $scopes, $context, $values-filter);
+    }
+    @include expect {
+      @content;
+    }
+  }
+}
+
 @include describe("@mapping()") {
   @include it("generates combinations for each entry of both maps") {
-    @include assert {
-      @include output {
-        @include mapping(
-          (
-            a: 1,
-            b: 2
-          ),
-          (
-            c: 3,
-            d: 4
-          )
-        ) {
-          value: value();
-          value-name: value-name();
-          scope: scope();
-          scope-name: scope-name();
-        }
-      }
-
-      @include expect {
-        // stylelint-disable declaration-block-no-duplicate-properties
-        value: 1;
-        value-name: a;
-        scope: 3;
-        scope-name: c;
-        value: 2;
-        value-name: b;
-        scope: 3;
-        scope-name: c;
-        value: 1;
-        value-name: a;
-        scope: 4;
-        scope-name: d;
-        value: 2;
-        value-name: b;
-        scope: 4;
-        scope-name: d;
-      }
+    @include test-mapping-output(
+      (
+        a: 1,
+        b: 2
+      ),
+      (
+        c: 3,
+        d: 4
+      )
+    ) {
+      // stylelint-disable declaration-block-no-duplicate-properties
+      value: 1;
+      value-name: a;
+      scope: 3;
+      scope-name: c;
+      value: 2;
+      value-name: b;
+      scope: 3;
+      scope-name: c;
+      value: 1;
+      value-name: a;
+      scope: 4;
+      scope-name: d;
+      value: 2;
+      value-name: b;
+      scope: 4;
+      scope-name: d;
     }
   }
 
   @include describe("$context") {
     @include it("gets provided to enclosed content") {
-      @include assert {
-        @include output {
-          @include mapping(
-            (
-              a: 1
-            ),
-            (
-              b: 2
-            ),
-            25
-          ) {
-            value: value();
-            value-name: value-name();
-            scope: scope();
-            scope-name: scope-name();
-            context: context();
-          }
-        }
+      @include test-mapping-output(
+        (
+          a: 1
+        ),
+        (
+          b: 2
+        ),
+        25
+      ) {
+        value: 1;
+        value-name: a;
+        scope: 2;
+        scope-name: b;
+        context: 25;
+      }
+    }
+  }
 
-        @include expect {
-          value: 1;
-          value-name: a;
-          scope: 2;
-          scope-name: b;
-          context: 25;
-        }
+  @include describe("$values-filter") {
+    @include it("filters the values for each scope") {
+      @include test-mapping-output(
+        (
+          a: 1,
+          b: 2
+        ),
+        (
+          c: 3,
+          d: 4
+        ),
+        $values-filter: (
+          c: (
+            b
+          ),
+          d: (
+            a
+          )
+        )
+      ) {
+        value: 2;
+        value-name: b;
+        scope: 3;
+        scope-name: c;
+        value: 1;
+        value-name: a;
+        scope: 4;
+        scope-name: d;
       }
     }
   }

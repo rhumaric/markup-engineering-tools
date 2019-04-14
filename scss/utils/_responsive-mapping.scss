@@ -18,7 +18,10 @@
     @each $breakpoint-type in (from, until) {
       $breakpoint-list: map-get($mapping, $breakpoint-type);
       @if ($breakpoint-list) {
-        $from-breakpoints: map-pick($breakpoints, $breakpoint-list);
+        $from-breakpoints: responsive-mapping-filter-breakpoints(
+          $breakpoints,
+          $breakpoint-list
+        );
         @if ($breakpoint-type == until) {
           $from-breakpoints: map-sort-by-value($from-breakpoints, desc);
         }
@@ -26,13 +29,25 @@
         @include mapping(
           $values,
           $from-breakpoints,
-          (
-            breakpoint-type: $breakpoint-type
-          )
+          $values-filter:
+            if(type-of($breakpoint-list) == "map", $breakpoint-list, null),
+          $context: (breakpoint-type: $breakpoint-type)
         ) {
           @content;
         }
       }
     }
   }
+}
+
+@function responsive-mapping-filter-breakpoints(
+  $breakpoints,
+  $breakpoint-list
+) {
+  $breakpoint-keys: $breakpoint-list;
+  @if (type-of($breakpoint-list) == "map") {
+    $breakpoint-keys: map-keys($breakpoint-list);
+  }
+
+  @return map-pick($breakpoints, $breakpoint-keys);
 }
