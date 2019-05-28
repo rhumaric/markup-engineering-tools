@@ -1,3 +1,5 @@
+@import "../../utils/units";
+
 $columns-number: 12;
 $columns-gutter-size: 1rem;
 
@@ -6,5 +8,15 @@ $columns-gutter-size: 1rem;
   $columns: 12,
   $gutter-size: $columns-gutter-size
 ) {
-  // Do the maths here
+  // Computations:
+  // $available: 100% - ($columns - 1) * $gutter-size;
+  // $column-size: ($available / $columns);
+  // $total-size: $column-size * $span + $gutter-size * ($span - 1);
+  // $total-size: $span * (100% - ($columns - 1) * $gutter-size) / $columns + $gutter-size * ($span - 1);
+  $gutter-component: $gutter-size * (1 - $span / $columns);
+  @if (strip-unit($gutter-component) == 0) {
+    @return 100% * $span / $columns;
+  } @else {
+    @return calc(#{100% * $span / $columns} - #{$gutter-component});
+  }
 }

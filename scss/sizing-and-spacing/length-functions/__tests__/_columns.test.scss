@@ -1,0 +1,13 @@
+@import "../columns";
+
+@include describe("columns") {
+  @include describe("column-size()") {
+    @include it("Computes the column size") {
+      @include assert-equal(column-size(2, 5, 1rem), calc(40% - 0.6rem));
+    }
+    @include it("Returns a percentage if the gutter contribution is 0") {
+      @include assert-equal(column-size(7, 10, 0), 70%);
+      @include assert-equal(column-size(11, 11), 100%);
+    }
+  }
+}
