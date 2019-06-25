@@ -1,0 +1,56 @@
+// https://developer.mozilla.org/uk/docs/Web/CSS/font-weight#Common_weight_name_mapping
+$font-weights: map-merge(
+  (
+    thin: 100,
+    extra-light: 200,
+    light: 300,
+    regular: 400,
+    medium: 500,
+    semi-bold: 600,
+    bold: 700,
+    extra-bold: 800,
+    black: 900
+  ),
+  $extra-font-weights
+) !default;
+
+@function font-weight($weight: "regular") {
+  @return map-get($font-weights, $weight);
+}
+
+$font-families: map-merge(
+  (
+    system: (
+      // https://css-tricks.com/snippets/css/system-font-stack/
+        family: -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen-Sans,
+      Ubuntu,
+      Cantarell,
+      "Helvetica Neue",
+      sans-serif
+    ),
+    // Format:
+      // family-name: (
+      //   family: font-stack,
+      //   weight: font-weight,
+      //   style: font-style,
+      //   stretch: font-stretch
+      // )
+  ),
+  $extra-font-families
+) !default;
+
+@mixin font-family($family-name) {
+  $settings: map-get($font-families, $font-family-name);
+  // TODO: Create a utility mixin to:
+  // grab a value from a map and if not empty,
+  // maybe apply a function (eg font-weight)
+  // and assign it to a property
+  font-family: map-get($settings, family);
+  font-style: map-get($settings, style);
+  font-weight: map-get($settings, weight);
+  font-stretch: map-get($settings, stretch);
+}
