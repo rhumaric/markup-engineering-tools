@@ -1,0 +1,67 @@
+@import "../../utils/units";
+
+$extra-aspect-ratios: () !default;
+$aspect-ratios: join(((1 1)), $extra-aspect-ratios) !default;
+$aspect-ratio-placeholder: before !default;
+
+@mixin aspect-ratio(
+  $width: 1,
+  $height: 1,
+  $placeholder: $aspect-ratio-placeholder
+) {
+  position: relative;
+  @include aspect-ratio-placeholder-size(
+    $width,
+    $height,
+    $placeholder,
+    $include-content: true
+  );
+}
+
+@mixin aspect-ratio-placeholder-style(
+  $placeholder: $aspect-ratio-placeholder,
+  $include-content: false
+) {
+  @if ($placeholder == before) {
+    &::before {
+      @if ($include-content == true) {
+        content: "";
+        display: block;
+      }
+      @content;
+    }
+  } @else if ($placeholder == after) {
+    &::after {
+      @if ($include-content == true) {
+        content: "";
+        display: block;
+      }
+      @content;
+    }
+  } @else if ($placeholder == explicit) {
+    &__placeholder {
+      @if ($include-content == true) {
+        display: block;
+      }
+      @content;
+    }
+  } @else {
+    #{$placeholder} {
+      @if ($include-content == true) {
+        display: block;
+      }
+      @content;
+    }
+  }
+}
+
+@mixin aspect-ratio-placeholder-size(
+  $width: 1,
+  $height: 1,
+  $placeholder: $aspect-ratio-placeholder,
+  $include-content: false
+) {
+  @include aspect-ratio-placeholder-style($placeholder, $include-content) {
+    padding-top: pct($height, $width);
+  }
+}

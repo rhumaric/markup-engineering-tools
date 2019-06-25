@@ -1,0 +1,121 @@
+@import "../aspect-ratio";
+
+@mixin test-aspect-ratio-placeholder-size(
+  $width: 1,
+  $height: 1,
+  $placeholder: before
+) {
+  @include assert {
+    @include output {
+      .aspect-ratio {
+        @include aspect-ratio-placeholder-size($width, $height, $placeholder);
+      }
+    }
+    @include expect {
+      @content;
+    }
+  }
+}
+
+@mixin test-aspect-ratio($width: 1, $height: 1, $placeholder: before) {
+  @include assert {
+    @include output {
+      .aspect-ratio {
+        @include aspect-ratio($width, $height, $placeholder);
+      }
+    }
+    @include expect {
+      @content;
+    }
+  }
+}
+
+@include describe("aspect-ratio") {
+  @include describe("@aspect-ratio()") {
+    @include it("Creates an aspect ratio container for the given dimension") {
+      @include test-aspect-ratio(16, 10) {
+        .aspect-ratio {
+          position: relative;
+
+          &::before {
+            content: "";
+            display: block;
+            padding-top: 62.5%;
+          }
+        }
+      }
+    }
+    @include describe("$placeholder") {
+      @include it(
+        "`after` creates a placeholder using a `::after` pseudo element"
+      ) {
+        @include test-aspect-ratio(16, 10, $placeholder: after) {
+          .aspect-ratio {
+            position: relative;
+
+            &::after {
+              content: "";
+              display: block;
+              padding-top: 62.5%;
+            }
+          }
+        }
+      }
+      // TODO: `explicit` option to create a BEM block ? Couldn't get the tests to generate
+      // nested selectors though
+      @include it(
+        "Any other string creates a placeholder using provided selector"
+      ) {
+        @include test-aspect-ratio(
+          16,
+          10,
+          $placeholder: ".aspect-ratio-placeholder"
+        ) {
+          .aspect-ratio {
+            position: relative;
+
+            .aspect-ratio-placeholder {
+              display: block;
+              padding-top: 62.5%;
+            }
+          }
+        }
+      }
+    }
+    // <---- RESTART HERE! List to set which selector get positioned as content
+    // Default: img, picture, video, object, iframe, embed and &__content
+    @include describe("$content-selectors");
+  }
+
+  @include describe("@aspect-ratio-placeholder-size") {
+    @include it("Sets the size of the placeholder") {
+      @include test-aspect-ratio-placeholder-size(16, 10) {
+        .aspect-ratio::before {
+          padding-top: 62.5%;
+        }
+      }
+    }
+    @include describe("$placeholder") {
+      @include it("`after` uses a `::after` pseudo element") {
+        @include test-aspect-ratio-placeholder-size(16, 10, after) {
+          .aspect-ratio::after {
+            padding-top: 62.5%;
+          }
+        }
+      }
+      @include it("Any other string uses provided selector") {
+        @include test-aspect-ratio-placeholder-size(
+          16,
+          10,
+          ".aspect-ratio-placeholder"
+        ) {
+          .aspect-ratio {
+            .aspect-ratio-placeholder {
+              padding-top: 62.5%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
