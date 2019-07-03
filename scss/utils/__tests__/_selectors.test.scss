@@ -1,0 +1,118 @@
+// stylelint-disable block-no-empty
+@import "../selectors";
+
+@include describe("selectors") {
+  @include describe("suffix()") {
+    @include it("Adds suffix to selector") {
+      @include assert-equal(
+        #{suffix("modifier", "--", ".block")},
+        unquote(".block--modifier")
+      );
+    }
+
+    @include it("Adds suffix to nested and compound selector") {
+      @include assert-equal(
+        #{suffix("modifier", "--", ":root a.block:hover::before")},
+        unquote(":root a.block--modifier:hover::before")
+      );
+    }
+
+    @include it("Adds suffix to each of the selectors") {
+      @include assert-equal(
+        #{suffix(
+            "modifier",
+            "--",
+            ".parent .block:hover::before, .other-parent .other-block"
+          )},
+        unquote(
+          ".parent .block--modifier:hover::before, .other-parent .other-block--modifier"
+        )
+      );
+    }
+
+    @include describe("Using & as selector") {
+      @include it("Sets & as the selector if none is set") {
+        @include assert() {
+          @include output() {
+            #{suffix('c','--')} {
+            }
+          }
+          @include expect() {
+            .test-output--c {
+            }
+          }
+        }
+      }
+
+      @include it("Supports nesting") {
+        @include assert() {
+          @include output() {
+            .parent {
+              #{suffix('c','--')} {
+              }
+            }
+          }
+          @include expect() {
+            .parent .parent--c {
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include describe("_suffix-compound-selector()") {
+    @include it("Adds suffix to selector") {
+      @include assert {
+        @include output {
+          #{_suffix-compound-selector('modifier','--','.block')} {
+          }
+        }
+        @include expect {
+          .block--modifier {
+          }
+        }
+      }
+    }
+    @include it("Adds suffix before last pseudo-selector") {
+      @include assert {
+        @include output {
+          #{_suffix-compound-selector('modifier','--','a.block:last-child:hover::before')} {
+          }
+        }
+        @include expect {
+          a.block--modifier:last-child:hover::before {
+          }
+        }
+      }
+    }
+  }
+
+  @include describe("_suffix-nested-selector()") {
+    @include it("Adds suffix to simple selector") {
+      @include assert {
+        @include output {
+          #{_suffix-nested-selector('modifier','--','.block')} {
+          }
+        }
+        @include expect {
+          .block--modifier {
+          }
+        }
+      }
+    }
+
+    @include it("Adds suffix to last selector") {
+      @include assert {
+        @include output {
+          #{_suffix-nested-selector('modifier','--','.parent .block:hover')} {
+          }
+        }
+        @include expect {
+          .parent .block--modifier:hover {
+          }
+        }
+      }
+    }
+  }
+}

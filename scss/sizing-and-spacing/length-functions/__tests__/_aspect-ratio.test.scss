@@ -61,8 +61,6 @@
           }
         }
       }
-      // TODO: `explicit` option to create a BEM block ? Couldn't get the tests to generate
-      // nested selectors though
       @include it(
         "Any other string creates a placeholder using provided selector"
       ) {

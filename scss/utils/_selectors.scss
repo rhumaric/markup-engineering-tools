@@ -1,0 +1,51 @@
+@function suffix($suffix, $separator, $selector: null) {
+  @if $selector == null {
+    $selector: &;
+  }
+  $tokens: selector-parse($selector);
+  $result: ();
+  @each $sel in $tokens {
+    $replacement: _suffix-nested-selector($suffix, $separator, $sel);
+    $result: append($result, $replacement, comma);
+  }
+
+  @return $result;
+}
+
+@function _suffix-compound-selector($suffix, $separator, $selector) {
+  // Break selector into simple-selectors and replace the last one before any pseudo selector
+  $simple-selectors: simple-selectors($selector);
+  $index: index-of-last-non-pseudo-selector($simple-selectors);
+  @return selector-append(
+    set-nth(
+        $simple-selectors,
+        $index,
+        "#{nth($simple-selectors, $index)}#{$separator}#{$suffix}"
+      )
+      ...
+  );
+}
+
+@function _suffix-nested-selector($suffix, $separator, $selector) {
+  // selector-parse returns a list of list of selectors, so digging into the first one
+  $selectors: nth(selector-parse($selector), 1);
+  $length: length($selectors);
+  $replacement: _suffix-compound-selector(
+    $suffix,
+    $separator,
+    nth($selectors, $length)
+  );
+  // Need to interpolate the replacement into a list
+  @return set-nth($selectors, $length, #{$replacement});
+}
+
+@function index-of-last-non-pseudo-selector($selector-list) {
+  $length: length($selector-list);
+  @for $index from $length through 1 {
+    $selector: nth($selector-list, $index);
+    @if str-slice($selector, 1, 1) != ":" {
+      @return $index;
+    }
+  }
+  @return 1;
+}
